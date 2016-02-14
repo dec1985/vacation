@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<table border="1" width="80%" align="center">
+    <tr align="center">
+        <th>id</th>
+        <th>user</th>
+        <th>left days</th>
+    </tr>
+    {% for user, sum in vacations_list %}
+        <tr align="center">
+            <td>{{ user.id }}</td>
+            <td><a href="{%url 'vacation:detail' user.username %}">{{ user }}</a></td>
+            <td>{{ sum }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
