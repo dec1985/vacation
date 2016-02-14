@@ -6,7 +6,7 @@ __author__ = 'fred'
 
 import os
 import sys
-sys.path.append('/Users/fred/work/mysite')
+sys.path.append(os.path.abspath('.'))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 import django
 django.setup()

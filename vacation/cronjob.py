@@ -28,6 +28,7 @@ def cronjob():
             else:
                 last = year_delta[-1]
             v = Vacation(user=i, begin=datetime.date.today(), last=last, note='ANNUAL')
+            print i.username, last
             v.save()
 
 if __name__ == '__main__':
