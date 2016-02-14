@@ -4,28 +4,42 @@
 __company__ = 'taou'
 __author__ = 'fred'
 
-import datetime
-from django.contrib.auth.models import User
-from .models import Vacation
+import os
+import sys
+sys.path.append('/Users/fred/work/mysite')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
+import django
+django.setup()
 
-lines = [
-    # username, realname, join_date, left_vacations
-    ['liuhongwei', '刘宏伟', '2014-09-15', 23],
-]
+import datetime
+import pypinyin
+from django.contrib.auth.models import User
+from vacation.models import Vacation
 
 def import_user():
-    for i in lines:
-        username = i[0]
-        last_name = i[1]
-        y, m, d = map(int, i[2].split('-'))
-        u = User(
-            is_staff=True,
-            is_active=True,
-            username=username,
-            date_joined=datetime.datetime(y, m, d),
-            last_name=last_name,
-        )
-        u.save()
-        v = Vacation(user=u, begin=datetime.date.today(), last=i[3], note='INIT')
-        v.save()
-        print u.username, v.last
+    with open('/Users/fred/work/mysite/a.txt', 'r') as f:
+        for line in f:
+            i = line.split()
+            print i
+            last_name = i[1].strip().decode('utf8')
+            username = str(''.join(pypinyin.lazy_pinyin(last_name)))
+            print last_name
+            print username
+            y, m, d = map(int, i[2].split('.'))
+            print y, m, d
+            u = User(
+                is_staff=True,
+                is_active=True,
+                username=username,
+                date_joined=datetime.datetime(y, m, d),
+                last_name=last_name,
+            )
+            print u
+            u.set_password(username)
+            u.save()
+            v = Vacation(user=u, begin=datetime.date.today(), last=i[0], note='INIT')
+            v.save()
+            print u.username, v.last
+
+if __name__ == '__main__':
+    import_user()
