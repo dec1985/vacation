@@ -9,18 +9,25 @@ from django.shortcuts import render_to_response
 
 def get_vacation_html(u):
     vacations = u.vacation_set.all().order_by('begin')
-    # vacations = Vacation.objects.filter(user=u)
     v_sum = 0
     for i in vacations:
         v_sum += i.last
     return render_to_response(
-        'vacation_list.html', {'vacations': vacations, 'sum': v_sum, 'user': u})
+        'vacation_list.html', {'vacations': vacations,
+                               'title': 'Total left vacations: %s days' % v_sum})
 
 
 @login_required(login_url='admin/login')
 def index(request):
     u = User.objects.get(username=request.user.username)
     return get_vacation_html(u)
+
+
+@login_required(login_url='admin/login')
+def show_plans(request):
+    vacations = Vacation.objects.filter(begin__gte=datetime.date.today())
+    return render_to_response(
+        'vacation_list.html', {'vacations': vacations, 'title': 'Plans'})
 
 
 @login_required(login_url='admin/login')
